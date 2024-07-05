@@ -10,7 +10,6 @@
     "@itcast/home": "file:../../features/home",
     "@itcast/project": "file:../../features/project",
     "@itcast/interview": "file:../../features/interview",
-    "@itcast/mine": "file:../../features/mine",
-    "@ohmos/json-bigint": "file:../../commons/json_bigint"
+    "@itcast/mine": "file:../../features/mine"
   }
 }
