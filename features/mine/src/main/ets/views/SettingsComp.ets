@@ -15,8 +15,8 @@ export interface Tool {
 
 @Component
 export struct SettingsComp {
-  @StorageProp('colorMode')
-  colorMode: ConfigurationConstant.ColorMode = ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET
+  @StorageProp('appColorMode')
+  appColorMode: ConfigurationConstant.ColorMode = ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET
   @State
   version: string = ''
   @State
@@ -145,7 +145,7 @@ export struct SettingsComp {
         Blank().height(15)
         this.toolsBuilder({
           name: '深色模式',
-          value: this.colorMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '已开启' : '已关闭',
+          value: this.appColorMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '已开启' : '已关闭',
           radius: 1,
           onClick: () => {
             this.dialog.open()

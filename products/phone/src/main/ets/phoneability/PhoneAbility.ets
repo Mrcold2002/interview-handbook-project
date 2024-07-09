@@ -19,7 +19,6 @@ class MyParcelable implements rpc.Parcelable {
 export default class PhoneAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     logger.info('Ability onCreate')
-    AppStorage.setOrCreate('initColorMode', this.context.config.colorMode)
     // call form
     try {
       this.callee.on('clock_in', (data: rpc.MessageSequence) => {

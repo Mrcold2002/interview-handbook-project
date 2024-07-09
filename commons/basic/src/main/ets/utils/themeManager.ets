@@ -5,6 +5,7 @@
  */
 import { ConfigurationConstant } from '@kit.AbilityKit'
 import { window } from '@kit.ArkUI'
+import { logger } from './logger'
 
 class ThemeManager {
   windowStage: window.Window | null = null
@@ -21,7 +22,7 @@ class ThemeManager {
     const app = getContext().getApplicationContext()
     app.on('environment', {
       onConfigurationUpdated: (config) => {
-        AppStorage.set('colorMode', config.colorMode)
+        logger.info('===', JSON.stringify(config))
         if (config.colorMode === ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT) {
           this.settingStatusBarBlack()
         }
@@ -36,11 +37,11 @@ class ThemeManager {
         // TODO
       }
     })
-    // 默认浅色模式
-    const initColorMode = AppStorage.get<ConfigurationConstant.ColorMode>('initColorMode')
-    PersistentStorage.persistProp('colorMode', initColorMode)
-    const currentColorMode = AppStorage.get<ConfigurationConstant.ColorMode>('colorMode')
-    app.setColorMode(currentColorMode)
+    // 获取应用当前主题
+    PersistentStorage.persistProp<ConfigurationConstant.ColorMode>('appColorMode',
+      ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT)
+    const appColorMode = AppStorage.get<ConfigurationConstant.ColorMode>('appColorMode')
+    app.setColorMode(appColorMode)
   }
 
   settingStatusBarWhite() {
@@ -52,27 +53,30 @@ class ThemeManager {
   }
 
   settingStatusBar(config: window.SystemBarProperties) {
-    this.getWindowStage().then((windowStage: window.Window) => {
-      windowStage.setWindowSystemBarProperties(config)
-    })
+    this.getWindowStage()
+      .then((windowStage: window.Window) => {
+        windowStage.setWindowSystemBarProperties(config)
+      })
   }
 
   enableFullScreen() {
-    this.getWindowStage().then((windowStage: window.Window) => {
-      windowStage.setWindowLayoutFullScreen(true)
-      const topArea = windowStage.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
-      AppStorage.setOrCreate('topHeight', px2vp(topArea.topRect.height))
-      const bottomArea = windowStage.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)
-      AppStorage.setOrCreate('bottomHeight', px2vp(bottomArea.bottomRect.height))
-    })
+    this.getWindowStage()
+      .then((windowStage: window.Window) => {
+        windowStage.setWindowLayoutFullScreen(true)
+        const topArea = windowStage.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
+        AppStorage.setOrCreate('topHeight', px2vp(topArea.topRect.height))
+        const bottomArea = windowStage.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)
+        AppStorage.setOrCreate('bottomHeight', px2vp(bottomArea.bottomRect.height))
+      })
   }
 
   disableFullScreen() {
-    this.getWindowStage().then((windowStage: window.Window) => {
-      windowStage.setWindowLayoutFullScreen(false)
-      AppStorage.setOrCreate('topHeight', 0)
-      AppStorage.setOrCreate('bottomHeight', 0)
-    })
+    this.getWindowStage()
+      .then((windowStage: window.Window) => {
+        windowStage.setWindowLayoutFullScreen(false)
+        AppStorage.setOrCreate('topHeight', 0)
+        AppStorage.setOrCreate('bottomHeight', 0)
+      })
   }
 }
 
