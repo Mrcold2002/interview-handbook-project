@@ -26,12 +26,3 @@ export class ProjectItemModel implements ProjectItem {
   }
 }
 
-export const ProjectItemData: ProjectItem[] = [
-  {
-    id: 3,
-    name: '鸿蒙知识点',
-    icon: $r('app.media.project03'),
-    describeInfo: '以 ArkTS 与 ArkUI 为主的鸿蒙基础知识点讲解',
-    tags: [{ tagName: '鸿蒙应用' }]
-  }
-]

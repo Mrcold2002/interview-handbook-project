@@ -1,5 +1,5 @@
 import { BasicConstant, HdSkeleton, HdSkeletonType, HdTag } from '@itcast/basic'
-import { ProjectItemData, ProjectItemModel, ProjectTag } from '../models/ProjectItemModel'
+import { ProjectItemModel, ProjectTag } from '../models/ProjectItemModel'
 import router from '@ohos.router'
 import { ProjectService } from '../services/ProjectService'
 
@@ -11,9 +11,10 @@ export struct ProjectComp {
   topHeight: number = 0
 
   aboutToAppear(): void {
-    ProjectService.findProjectList().then(res => {
-      this.list = [...res.data, ...ProjectItemData]
-    })
+    ProjectService.findProjectList()
+      .then(res => {
+        this.list = [...res.data]
+      })
   }
 
   @Builder
