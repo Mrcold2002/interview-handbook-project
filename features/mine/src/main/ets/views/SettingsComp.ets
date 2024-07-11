@@ -4,6 +4,7 @@ import fs from '@ohos.file.fs';
 import { promptAction, router } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
 import { ThemeDialog } from '../components/ThemeDialog';
+import { fileIo, storageStatistics } from '@kit.CoreFileKit';
 
 export interface Tool {
   icon?: ResourceStr
@@ -35,54 +36,27 @@ export struct SettingsComp {
     })
   }
 
-  calcDir(dir: string) {
-    let size = 0
-    const calcSize = (rootDir: string) => {
-      const listDir = fs.listFileSync(rootDir)
-      listDir.forEach(item => {
-        const filePath = rootDir + '/' + item
-        const stat = fs.statSync(filePath)
-        if (stat.isDirectory()) {
-          calcSize(filePath)
-        }
-        if (stat.isFile()) {
-          size += stat.size
-        }
-      })
-    }
-    calcSize(dir)
-    return size
-  }
 
   calcCache() {
-    // storageStatistics.getCurrentBundleStats().then(res => {
-    //   this.cache = (res.cacheSize / (1024 * 1024)).toFixed(2) + 'MB'
-    // })
-    const ctx = getContext()
-    const size1 = this.calcDir(ctx.cacheDir)
-    const size2 = this.calcDir(ctx.tempDir)
-    this.cache = ((size1 + size2) / (1024 * 1024)).toFixed(2) + 'MB'
-  }
-
-  clearDir(dir: string) {
-    const listDir = fs.listFileSync(dir)
-    listDir.forEach(item => {
-      const filePath = dir + '/' + item
-      const stat = fs.statSync(filePath)
-      if (stat.isDirectory()) {
-        fs.rmdirSync(filePath)
-      }
-      if (stat.isFile()) {
-        fs.unlinkSync(filePath)
-      }
+    storageStatistics.getCurrentBundleStats().then(res => {
+      this.cache = (res.cacheSize / (1000 * 1000)).toFixed(2) + 'MB'
     })
-    promptAction.showToast({ message: '清理完毕' })
   }
 
   clearCache() {
     const ctx = getContext()
-    this.clearDir(ctx.cacheDir)
-    this.clearDir(ctx.tempDir)
+    const ctxCacheDir = ctx.cacheDir
+    const ctxExist = fileIo.accessSync(ctxCacheDir)
+    if(ctxExist) {
+      fileIo.rmdirSync(ctxCacheDir)
+    }
+    const app = ctx.getApplicationContext()
+    const appCacheDir = app.cacheDir
+    const appExist = fileIo.accessSync(appCacheDir)
+    if(appExist) {
+      fileIo.rmdirSync(appCacheDir)
+    }
+    promptAction.showToast({ message: '清理完毕' })
     this.calcCache()
   }
 
@@ -156,7 +130,7 @@ export struct SettingsComp {
             this.clearCache()
           }
         })
-        this.toolsBuilder({ name: '检查更新', value: this.version, radius: 2 })
+        this.toolsBuilder({ name: '当前版本', value: this.version, radius: 2 })
         Blank().height(15)
         Text('退出账号')
           .height(50)
