@@ -12,6 +12,7 @@ export interface WordItem {
 
 type Words = Record<string, WordItem[]>
 
+
 @Component
 export struct WordComp {
   @State
