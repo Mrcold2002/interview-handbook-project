@@ -1,5 +1,5 @@
 import { authStore, HdNav } from '@itcast/basic';
-import { bundleManager, ConfigurationConstant } from '@kit.AbilityKit';
+import { bundleManager, common, ConfigurationConstant, Want } from '@kit.AbilityKit';
 import fs from '@ohos.file.fs';
 import { promptAction, router } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
@@ -31,29 +31,30 @@ export struct SettingsComp {
     bundleManager.getBundleInfoForSelf(
       bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION |
       bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_METADATA
-    ).then((res) => {
-      this.version = 'v' + res.versionName
-    })
+    )
+      .then((res) => {
+        this.version = 'v' + res.versionName
+      })
   }
 
-
   calcCache() {
-    storageStatistics.getCurrentBundleStats().then(res => {
-      this.cache = (res.cacheSize / (1000 * 1000)).toFixed(2) + 'MB'
-    })
+    storageStatistics.getCurrentBundleStats()
+      .then(res => {
+        this.cache = (res.cacheSize / (1000 * 1000)).toFixed(2) + 'MB'
+      })
   }
 
   clearCache() {
     const ctx = getContext()
     const ctxCacheDir = ctx.cacheDir
     const ctxExist = fileIo.accessSync(ctxCacheDir)
-    if(ctxExist) {
+    if (ctxExist) {
       fileIo.rmdirSync(ctxCacheDir)
     }
     const app = ctx.getApplicationContext()
     const appCacheDir = app.cacheDir
     const appExist = fileIo.accessSync(appCacheDir)
-    if(appExist) {
+    if (appExist) {
       fileIo.rmdirSync(appCacheDir)
     }
     promptAction.showToast({ message: '清理完毕' })
@@ -106,7 +107,8 @@ export struct SettingsComp {
     Column() {
       HdNav({ title: '设置', showRightIcon: false, hasBorder: true })
       Column({ space: 0.5 }) {
-        Blank().height(15)
+        Blank()
+          .height(15)
         this.toolsBuilder({
           name: '编辑资料', radius: 1, onClick: () => {
             authStore.checkAuth({
@@ -114,9 +116,23 @@ export struct SettingsComp {
             })
           }
         })
-        this.toolsBuilder({ name: '账号设置' })
-        this.toolsBuilder({ name: '消息设置', radius: 2 })
-        Blank().height(15)
+        this.toolsBuilder({ name: '账号设置', radius: 2 })
+        Blank()
+          .height(15)
+        this.toolsBuilder({
+          name: '消息推送', radius: 1, onClick: () => {
+            let want: Want = {
+              bundleName: 'com.huawei.hmos.settings',
+              abilityName: 'com.huawei.hmos.settings.MainAbility',
+              uri: 'application_info_entry',
+              parameters: {
+                pushParams: 'com.itcast.pass_interview'
+              }
+            };
+            const context = getContext(this) as common.UIAbilityContext
+            context.startAbility(want)
+          }
+        })
         this.toolsBuilder({
           name: '深色模式',
           value: this.appColorMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '已开启' : '已关闭',
@@ -131,7 +147,8 @@ export struct SettingsComp {
           }
         })
         this.toolsBuilder({ name: '当前版本', value: this.version, radius: 2 })
-        Blank().height(15)
+        Blank()
+          .height(15)
         Text('退出账号')
           .height(50)
           .fontColor($r('app.color.common_main_color'))
