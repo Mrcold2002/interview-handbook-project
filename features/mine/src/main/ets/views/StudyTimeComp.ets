@@ -22,6 +22,7 @@ interface ResponseData {
 
 @Component
 export struct StudyTimeComp {
+  @StorageProp('bottomHeight') bottomHeight: number = 0
   @State
   data: ResponseData = {
     totalTime: 0,
@@ -82,82 +83,86 @@ export struct StudyTimeComp {
   build() {
     Column() {
       HdNav({ title: '学习数据', showRightIcon: false })
-      Scroll() {
-        Column() {
-          // time
+      Column(){
+        Scroll() {
           Column() {
-            Row() {
-              Text('累计学习时长')
-                .margin({ right: 5 })
-                .fontColor($r('app.color.common_gray_03'))
-              Image($r('sys.media.ohos_ic_public_clock'))
-                .width(16)
-                .aspectRatio(1)
-                .fillColor('#41B8B1')
-            }.width('100%').margin({ bottom: 10 })
+            // time
+            Column() {
+              Row() {
+                Text('累计学习时长')
+                  .margin({ right: 5 })
+                  .fontColor($r('app.color.common_gray_03'))
+                Image($r('sys.media.ohos_ic_public_clock'))
+                  .width(16)
+                  .aspectRatio(1)
+                  .fillColor('#41B8B1')
+              }.width('100%').margin({ bottom: 10 })
 
-            Row() {
-              Text(getTimeText(this.data.totalTime, false))
-                .fontSize(40)
-                .fontWeight(FontWeight.Bold)
-                .fontColor('#41B8B1')
-              Text(this.data.totalTime < 3600 ? '分钟' : '小时')
-                .margin({ bottom: 8, left: 8 })
-                .fontColor('#41B8B1')
-            }
-            .width('100%')
-            .alignItems(VerticalAlign.Bottom)
-          }
-
-          if (this.data.studyData[0]) {
-            // knowledge
-            Text('知识点学习进度')
-              .margin({ bottom: 10, top: 30 })
-              .width('100%')
-            GridRow({ columns: 2, gutter: 20 }) {
-              ForEach(this.data.studyData[0].list, (time: TimeItem) => {
-                this.progressBuilder(time.name, time.done, time.total)
-              })
-              GridCol({ span: 2 }) {
-                Row({ space: 16 }) {
-                  this.dotBuilder('#87E0CD', false)
-                  this.dotBuilder('#87E0CD', true)
-                }
-                .margin({ top: 10 })
+              Row() {
+                Text(getTimeText(this.data.totalTime, false))
+                  .fontSize(40)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor('#41B8B1')
+                Text(this.data.totalTime < 3600 ? '分钟' : '小时')
+                  .margin({ bottom: 8, left: 8 })
+                  .fontColor('#41B8B1')
               }
-            }
-            .backgroundColor(Color.White)
-            .padding(16)
-            .borderRadius(8)
-            .shadow({ color: '#ededed', radius: 16 })
-          }
-
-          if (this.data.studyData[1]) {
-            // project
-            Text('项目学习进度')
-              .margin({ bottom: 10, top: 30 })
               .width('100%')
-            GridRow({ columns: 1, gutter: 20 }) {
-              ForEach(this.data.studyData[1].list, (time: TimeItem) => {
-                this.progressBuilder(time.name, time.done, time.total, '#C7B5ED')
-              })
-              GridCol() {
-                Row({ space: 16 }) {
-                  this.dotBuilder('#C7B5ED', false)
-                  this.dotBuilder('#C7B5ED', true)
-                }
-                .margin({ top: 10 })
-              }
+              .alignItems(VerticalAlign.Bottom)
             }
-            .backgroundColor(Color.White)
-            .padding(16)
-            .borderRadius(8)
-            .shadow({ color: '#ededed', radius: 16 })
+
+            if (this.data.studyData[0]) {
+              // knowledge
+              Text('知识点学习进度')
+                .margin({ bottom: 10, top: 30 })
+                .width('100%')
+              GridRow({ columns: 2, gutter: 20 }) {
+                ForEach(this.data.studyData[0].list, (time: TimeItem) => {
+                  this.progressBuilder(time.name, time.done, time.total)
+                })
+                GridCol({ span: 2 }) {
+                  Row({ space: 16 }) {
+                    this.dotBuilder('#87E0CD', false)
+                    this.dotBuilder('#87E0CD', true)
+                  }
+                  .margin({ top: 10 })
+                }
+              }
+              .backgroundColor(Color.White)
+              .padding(16)
+              .borderRadius(8)
+              .shadow({ color: '#ededed', radius: 16 })
+            }
+
+            if (this.data.studyData[1]) {
+              // project
+              Text('项目学习进度')
+                .margin({ bottom: 10, top: 30 })
+                .width('100%')
+              GridRow({ columns: 1, gutter: 20 }) {
+                ForEach(this.data.studyData[1].list, (time: TimeItem) => {
+                  this.progressBuilder(time.name, time.done, time.total, '#C7B5ED')
+                })
+                GridCol() {
+                  Row({ space: 16 }) {
+                    this.dotBuilder('#C7B5ED', false)
+                    this.dotBuilder('#C7B5ED', true)
+                  }
+                  .margin({ top: 10 })
+                }
+              }
+              .backgroundColor(Color.White)
+              .padding(16)
+              .borderRadius(8)
+              .shadow({ color: '#ededed', radius: 16 })
+            }
           }
+          .padding(16)
+          .margin({ bottom: this.bottomHeight })
         }
-        .padding(16)
+        .scrollBar(BarState.Off)
       }
-      .scrollBar(BarState.Off)
+      .layoutWeight(1)
     }
     .width('100%')
     .height('100%')
