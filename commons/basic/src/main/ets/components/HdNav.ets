@@ -15,7 +15,7 @@ export struct HdNav {
   @Prop
   showRightIcon: boolean = true
   @BuilderParam
-  titleBuilder: () => void
+  titleBuilder: () => void = this.defaultTitle
   @BuilderParam
   menuBuilder: () => void = this.defaultMenu
 
@@ -23,7 +23,10 @@ export struct HdNav {
   defaultMenu() {
 
   }
+  @Builder
+  defaultTitle() {
 
+  }
   build() {
     Row({ space: 16 }) {
       Image(this.leftIcon)

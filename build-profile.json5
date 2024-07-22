@@ -16,21 +16,21 @@
         "name": "release"
       }
     ],
-    "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "/Users/zhousg/.ohos/config/default_interview-handbook-project_HLKK-jbFP2i_86C1kdyuRrPB-WXQXKhyYK6HPBpJVIo=.cer",
-          "storePassword": "0000001B299575FFA0D251AB9048152F8DB1430243AF126AFB73D0AACCDEC5120CA2D568368642F6DD6EA9",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001BC94D0060CB5BD78EE7F34D46CFAF8C73FA3CBA8BBC26A2CC4B3AC95BCC425A4A36474F1514BECA",
-          "profile": "/Users/zhousg/.ohos/config/default_interview-handbook-project_HLKK-jbFP2i_86C1kdyuRrPB-WXQXKhyYK6HPBpJVIo=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/zhousg/.ohos/config/default_interview-handbook-project_HLKK-jbFP2i_86C1kdyuRrPB-WXQXKhyYK6HPBpJVIo=.p12"
-        }
-      }
-    ]
+//    "signingConfigs": [
+//      {
+//        "name": "default",
+//        "type": "HarmonyOS",
+//        "material": {
+//          "certpath": "/Users/zhousg/.ohos/config/default_interview-handbook-project_HLKK-jbFP2i_86C1kdyuRrPB-WXQXKhyYK6HPBpJVIo=.cer",
+//          "storePassword": "0000001B299575FFA0D251AB9048152F8DB1430243AF126AFB73D0AACCDEC5120CA2D568368642F6DD6EA9",
+//          "keyAlias": "debugKey",
+//          "keyPassword": "0000001BC94D0060CB5BD78EE7F34D46CFAF8C73FA3CBA8BBC26A2CC4B3AC95BCC425A4A36474F1514BECA",
+//          "profile": "/Users/zhousg/.ohos/config/default_interview-handbook-project_HLKK-jbFP2i_86C1kdyuRrPB-WXQXKhyYK6HPBpJVIo=.p7b",
+//          "signAlg": "SHA256withECDSA",
+//          "storeFile": "/Users/zhousg/.ohos/config/default_interview-handbook-project_HLKK-jbFP2i_86C1kdyuRrPB-WXQXKhyYK6HPBpJVIo=.p12"
+//        }
+//      }
+//    ]
   },
   "modules": [
     {

@@ -7,7 +7,11 @@ export enum HdSkeletonType {
 @Component
 export struct HdSkeleton {
   @BuilderParam
-  default: () => void
+  default: () => void = this.defaultFunction
+  @Builder
+  defaultFunction(){
+
+  }
   // 透明度
   @State
   opacityValue: number = 1
